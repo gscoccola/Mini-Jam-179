@@ -5,7 +5,7 @@ public class Property
 {
     float[] _valueArray;
     float[] _costArray;
-    int _currentIndex = 0;
+    public int _currentIndex = 0;
     public float _currentValue;
     public float _currentCost;
 
@@ -15,6 +15,7 @@ public class Property
         _costArray = costArray;
         _currentIndex = 0;
         _currentValue = valueArray[0];
+        _currentCost = costArray[0];
     }
 
     public bool TryUpgradeProperty()

@@ -2,11 +2,20 @@ using UnityEngine;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    BoxCollider2D _mCollider;
+    int currentBurningObjects;
+    AudioPlayer _audioPlayer;
+    ParticleSystem _particleSystem;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        _mCollider = GetComponent<BoxCollider2D>();
+        _audioPlayer = FindAnyObjectByType<AudioPlayer>();
+        _particleSystem = GetComponent<ParticleSystem>();
+    }
+
+    public void UpdateCurrentBurningObjects(int amount)
+    {
+        currentBurningObjects += amount;
+        _audioPlayer.UpdateBurningSound(currentBurningObjects);
+        _particleSystem.emissionRate = currentBurningObjects * 30;
     }
 }

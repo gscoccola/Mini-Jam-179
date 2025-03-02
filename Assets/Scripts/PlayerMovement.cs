@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     GameManager _gameManager;
    
     PlayerProperties _properties;
-
+    public float _currentSpeed;
 
 
     private void Awake()
@@ -30,8 +30,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        _currentSpeed = _properties._speed._currentValue;
         _mRigidBody.linearVelocity = Vector2.MoveTowards(_mRigidBody.linearVelocity,
-            _moveInput * _properties._speed._currentValue, _properties._speed._currentValue * 5 * Time.deltaTime);
+            _moveInput * _currentSpeed, _currentSpeed * 5 * Time.deltaTime);
         CheckForBoundaries();
     }
 
@@ -56,11 +57,5 @@ public class PlayerMovement : MonoBehaviour
             );
 
     }
-
-    void OnAttack(InputValue value)
-    {
-        //_gameManager.ExpandArea();
-    }
-
 
 }
