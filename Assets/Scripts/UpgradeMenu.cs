@@ -13,9 +13,11 @@ public class UpgradeMenu : MonoBehaviour
     PlayerProperties _playerProperties;
     GameManager _gameManager;
     AudioPlayer _audioPlayer;
+    PlayerInteraction _playerInteraction;
 
     private void Awake()
     {
+        _playerInteraction = FindAnyObjectByType<PlayerInteraction>();
         _playerProperties = FindAnyObjectByType<PlayerProperties>();
         _gameManager = FindAnyObjectByType<GameManager>();
         _audioPlayer = FindAnyObjectByType<AudioPlayer>();
@@ -44,6 +46,7 @@ public class UpgradeMenu : MonoBehaviour
             _audioPlayer.PlayBuyClip();
             _gameManager.ChangeMoney(-currentCost);
             _playerProperties.UpdateProperties();
+            _playerInteraction.UpdateParticleSize();
             UpdateButtons();
         }
         else

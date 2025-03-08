@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -19,6 +20,10 @@ public class AudioPlayer : MonoBehaviour
     [Header("No Money Sound")]
     [SerializeField] AudioClip _noMoneyClip;
     [SerializeField][Range(0f, 1f)] float _noMoneyVolume = 1f;
+
+    [Header("Milestone Sound")]
+    [SerializeField] AudioClip[] _milestoneClip;
+    [SerializeField][Range(0f, 1f)] float _milestoneVolume = 1f;
 
     [Header("Fire loop")]
     [SerializeField] AudioSource _fireLoop;
@@ -44,24 +49,32 @@ public class AudioPlayer : MonoBehaviour
 
     public void UpdateBurningSound(int amount)
     {
-        switch (amount)
+        try
         {
-            case 0:
-                _fireLoop.volume = 0f;
-                break;
-            case 1:
-                _fireLoop.volume = 1f;
-                break;
-            case 2:
-                _fireLoop.volume = 1.4f;
-                break;
-            case 3:
-                _fireLoop.volume = 1.6f;
-                break;
-            case 4:
-                _fireLoop.volume = 1.7f;
-                break;
+            switch (amount)
+            {
+                case 0:
+                    _fireLoop.volume = 0f;
+                    break;
+                case 1:
+                    _fireLoop.volume = 1f;
+                    break;
+                case 2:
+                    _fireLoop.volume = 1.4f;
+                    break;
+                case 3:
+                    _fireLoop.volume = 1.6f;
+                    break;
+                case 4:
+                    _fireLoop.volume = 1.7f;
+                    break;
+            }
         }
+        catch (MissingReferenceException)
+        {
+
+        }
+        
     }
 
     public void PlayIgnitionClip()
@@ -79,10 +92,21 @@ public class AudioPlayer : MonoBehaviour
         PlayClipAtPoint(_noMoneyClip, Vector3.zero, _noMoneyVolume);
     }
 
+    public void PlayMilestoneClip(int index)
+    {
+        PlayClipAtPoint(_milestoneClip[index], Vector3.zero, _milestoneVolume, 1, true);
+    }
+
     public void PauseMusic()
     {
         _music.Pause();
     }
+
+    public void StopTrack()
+    {
+        _music.gameObject.SetActive(false);
+    }
+
 
     public void ResumeMusic()
     {
@@ -95,14 +119,14 @@ public class AudioPlayer : MonoBehaviour
     }
 
 
-    public static AudioSource PlayClipAtPoint(AudioClip clip, Vector3 pos, float volume = 1, float pitch = 1, bool dontDestroyOnLoad = false)
+    public static AudioSource PlayClipAtPoint(AudioClip clip, Vector3 pos, float volume = 1, float pitch = 1, bool ignorePause = false)
     {
         GameObject tempGO = new GameObject("TempAudio"); // create the temp object
         tempGO.transform.position = pos; // set its position
         AudioSource tempASource = tempGO.AddComponent<AudioSource>(); // add an audio source
-        if (dontDestroyOnLoad)
+        if (ignorePause)
         {
-            DontDestroyOnLoad(tempASource);
+            tempASource.ignoreListenerPause = true;
         }
         tempASource.clip = clip;
         tempASource.pitch = pitch;
